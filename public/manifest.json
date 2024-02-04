@@ -1,0 +1,18 @@
+{
+  "short_name": "Zapp Wallet",
+  "name": "Zapp Wallet",
+  "description": "A crypto wallet using the ethereum blockchain",
+  "manifest_version": 3,
+  "version": "1.0.0",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open Wallet"
+  },
+  "permissions": [],
+  "icons": {
+    "16": "blueBolt.png",
+    "32": "blueBolt.png",
+    "48": "blueBolt.png",
+    "128": "blueBolt.png"
+  }
+}

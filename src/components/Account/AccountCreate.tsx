@@ -1,58 +1,100 @@
 import * as React from "react";
-import {generateKeys} from "../../utils/AccountUtils.ts";
+import {generateAccount} from "../../utils/AccountUtils.ts";
+import AccountDetails from "./AccountDetails.tsx";
+import {useCallback, useEffect, useState} from "react";
+import {Account} from "../../models/Account.ts";
+
+const recoveryPhraseKeyName = 'recoveryPhrase';
 
 const AccountCreate: React.FC = () => {
-    const [showSeedInput, setShowSeedInput] = React.useState(false);
+    const [showRecoverInput, setShowRecoverInput] = React.useState(false);
     const [seedPhrase, setSeedPhrase] = React.useState('');
+    const [account, setAccount] = useState<Account | null>(null)
 
-    const createAccount = () => {
-        // Code to create Account comes here
-        const keys = generateKeys();
-        console.log(keys);
-    };
+    const recoverAccount = useCallback(
+        // recoverAccount could be used without recoveryPhrase as an argument, but then we would have to
+        // put it in a deps array.
+        async (recoveryPhrase: string) => {
 
-    const handleRecoverClick = () => {
-        setShowSeedInput(!showSeedInput);
-    };
+            // Call the generateAccount function with no arguments
+            // Call the generateAccount function and pass it 0 and the current seedphrase
+            const result = await generateAccount(recoveryPhrase);
+
+            // Update the account state with the newly recovered account
+            setAccount(result.account);
+
+            if (localStorage.getItem(recoveryPhraseKeyName) !== recoveryPhrase) {
+                localStorage.setItem(recoveryPhraseKeyName, recoveryPhrase);
+            }
+
+        }, []
+    );
 
     const handleSeedInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSeedPhrase(event.target.value);
     };
 
-    const handleSeedPhraseSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        generateKeys(seedPhrase)
-        // Reset state after processing
-        setShowSeedInput(false);
-        setSeedPhrase('');
-    };
+    async function createAccount() {
+        // Call the generateAccount function with no arguments
+        const result = await generateAccount();
+
+        // Update the account state with the newly created account
+        setAccount(result.account);
+        console.log('acc: ', result.account)
+    }
+
+    useEffect(() => {
+
+        const localStorageRecoveryPhrase = localStorage.getItem(recoveryPhraseKeyName)
+        if (localStorageRecoveryPhrase) {
+            setSeedPhrase(localStorageRecoveryPhrase);
+            recoverAccount(localStorageRecoveryPhrase).then(r => console.log(r));
+        }
+    }, [recoverAccount])
 
     return (
-        <div>
-            <button onClick={createAccount}>Create Account</button>
-            &nbsp;&nbsp;
-            <button onClick={handleRecoverClick}>Recover Account</button>
-            {showSeedInput && (
-                <div>
-                    <hr/>
-                    <form onSubmit={handleSeedPhraseSubmit}>
-                        <label>
-                            Seed Phrase:
+        <>
+            <h1>
+                Zapp Wallet
+            </h1>
+            <div>
+                <form onSubmit={event => event.preventDefault()}>
+                    <button onClick={createAccount}>Create Account</button>
+                    &nbsp;&nbsp;
+                    <button
+                        onClick={() => showRecoverInput ? recoverAccount(seedPhrase) : setShowRecoverInput(true)}
+                        disabled={showRecoverInput && !seedPhrase}
+                    >
+                        Recover Account
+                    </button>
+                    {showRecoverInput && (
+                        <div>
+                            <hr/>
+                            <label>
+                                Seed Phrase:
+                                <input
+                                    type="text"
+                                    value={seedPhrase}
+                                    onChange={handleSeedInputChange}
+                                />
+                            </label>
+                            &nbsp;
                             <input
-                                type="text"
-                                value={seedPhrase}
-                                onChange={handleSeedInputChange}
+                                type="submit"
+                                value="Submit"
                             />
-                        </label>
-                        &nbsp;
-                        <input
-                            type="submit"
-                            value="Submit"
-                        />
-                    </form>
-                </div>
-            )}
-        </div>
+                        </div>
+                    )}
+                </form>
+                {
+                    account &&
+                    <>
+                        <hr/>
+                        <AccountDetails account={account}/>
+                    </>
+                }
+            </div>
+        </>
     );
 };
 

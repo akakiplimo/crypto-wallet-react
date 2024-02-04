@@ -1,19 +1,22 @@
-import {ethers, HDNodeWallet} from "ethers";
+import { Wallet } from 'ethers';
+import { Account } from '../models/Account';
 
-export const generateKeys = (seedPhrase?: string) => {
-    let wallet: HDNodeWallet;
+export function generateAccount(seedPhrase: string = "", index: number = 0):
+    { account: Account, seedPhrase: string } {
+    let wallet: Wallet;
 
-    if(seedPhrase){
-        wallet = ethers.Wallet.fromPhrase(seedPhrase)
-    } else {
-        wallet = ethers.Wallet.createRandom();
-        seedPhrase = wallet.mnemonic?.phrase;
+    // If the seed phrase is not provided, generate a random mnemonic using a CSPRNG
+    if (seedPhrase === "") {
+        seedPhrase = Wallet.createRandom().mnemonic.phrase;
     }
 
-    const privateKey = wallet.privateKey
-    const address = wallet.address
+    // If the seed phrase does not contain spaces, it is likely a mnemonic
+    wallet = (seedPhrase.includes(" ")) ? Wallet.fromMnemonic(seedPhrase, `m/44'/60'/0'/0/${index}`) :
+        new Wallet(seedPhrase);
 
-    console.log({seedPhrase, privateKey, address})
+    const { address } = wallet;
+    const account = { address, privateKey: wallet.privateKey, balance: "0" };
 
-    return {seedPhrase, privateKey, address}
-};
+    // If the seedphrase does not include spaces then it's actually a private key, so return a blank string.
+    return { account, seedPhrase: seedPhrase.includes(" ")? seedPhrase : "" };
+}
