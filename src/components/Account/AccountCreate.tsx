@@ -39,7 +39,7 @@ const AccountCreate: React.FC = () => {
     const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             event.preventDefault();
-            recoverAccount(seedPhrase).then(r => {});
+            recoverAccount(seedPhrase).then(() => {});
         }
     }
 
