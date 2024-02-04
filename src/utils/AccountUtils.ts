@@ -8,6 +8,7 @@ export function generateAccount(seedPhrase: string = "", index: number = 0):
     // If the seed phrase is not provided, generate a random mnemonic using a CSPRNG
     if (seedPhrase === "") {
         seedPhrase = Wallet.createRandom().mnemonic.phrase;
+        console.log('seed: ', seedPhrase)
     }
 
     // If the seed phrase does not contain spaces, it is likely a mnemonic
