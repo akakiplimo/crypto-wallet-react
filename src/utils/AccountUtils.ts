@@ -1,5 +1,5 @@
-import { Wallet } from 'ethers';
-import { Account } from '../models/Account';
+import {Wallet} from 'ethers';
+import {Account} from '../models/Account';
 
 export function generateAccount(seedPhrase: string = "", index: number = 0):
     { account: Account, seedPhrase: string } {
@@ -15,9 +15,13 @@ export function generateAccount(seedPhrase: string = "", index: number = 0):
     wallet = (seedPhrase.includes(" ")) ? Wallet.fromMnemonic(seedPhrase, `m/44'/60'/0'/0/${index}`) :
         new Wallet(seedPhrase);
 
-    const { address } = wallet;
-    const account = { address, privateKey: wallet.privateKey, balance: "0" };
+    const {address} = wallet;
+    const account = {address, privateKey: wallet.privateKey, balance: "0"};
 
     // If the seedphrase does not include spaces then it's actually a private key, so return a blank string.
-    return { account, seedPhrase: seedPhrase.includes(" ")? seedPhrase : "" };
+    return {account, seedPhrase: seedPhrase.includes(" ") ? seedPhrase : ""};
+}
+
+export function toFixedIfNecessary(value: string, decimalPlaces: number = 2) {
+    return +parseFloat(value).toFixed(decimalPlaces);
 }
