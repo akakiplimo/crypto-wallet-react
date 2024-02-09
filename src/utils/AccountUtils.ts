@@ -22,6 +22,6 @@ export function generateAccount(seedPhrase: string = "", index: number = 0):
     return {account, seedPhrase: seedPhrase.includes(" ") ? seedPhrase : ""};
 }
 
-export function toFixedIfNecessary(value: string, decimalPlaces: number = 2) {
+export function toFixedIfNecessary(value: string, decimalPlaces: number = 4) {
     return +parseFloat(value).toFixed(decimalPlaces);
 }
