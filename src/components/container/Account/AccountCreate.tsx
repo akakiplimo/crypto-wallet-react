@@ -2,7 +2,7 @@ import React from "react";
 import {generateAccount} from "../../../utils/AccountUtils.ts";
 import AccountDetails from "./AccountDetails.tsx";
 import {Account} from "../../../models/Account.ts";
-import boltLogo from "../../../assets/blueBolt.png"
+import boltLogo from "../../../assets/blueBolt.svg"
 import {StyledButton, StyledForm, StyledInput, StyledLabel} from "../../presentational/Form.tsx";
 
 const recoveryPhraseKeyName = 'recoveryPhrase';

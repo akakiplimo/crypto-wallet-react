@@ -10,9 +10,9 @@
   },
   "permissions": [],
   "icons": {
-    "16": "blueBolt.png",
-    "32": "blueBolt.png",
-    "48": "blueBolt.png",
-    "128": "blueBolt.png"
+    "16": "blueBolt.svg",
+    "32": "blueBolt.svg",
+    "48": "blueBolt.svg",
+    "128": "blueBolt.svg"
   }
 }
