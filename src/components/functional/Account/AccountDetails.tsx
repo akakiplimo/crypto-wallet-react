@@ -5,6 +5,7 @@ import {goerli} from "../../../models/Chain.ts";
 import {toFixedIfNecessary} from "../../../utils/AccountUtils.ts";
 import {sendToken} from "../../../utils/TransactionUtils.ts";
 import {StyledButton, StyledInput, StyledLabel} from "../../presentational/Form.tsx";
+import AccountTransactions from "./AccountTransactions.tsx";
 
 interface AccountDetailProps {
     account: Account
@@ -62,7 +63,7 @@ const AccountDetails: React.FC<AccountDetailProps> = ({account}) => {
                 // set the network status to be 'complete' and the message to the transaction hash
                 setNetworkResponse({
                     status: 'complete',
-                    message: <p>Transfer complete!
+                    message: <p>Transfer complete! &nbsp;
                         <a href={`${goerli.blockExploreUrl}/tx/${receipt.transactionHash}`} target="_blank"
                            rel="noreferrer">
                             View Transaction
@@ -140,6 +141,8 @@ const AccountDetails: React.FC<AccountDetailProps> = ({account}) => {
                         <p>Error occurred while transferring tokens: {networkResponse.message}</p>}
                 </>
             }
+
+            <AccountTransactions account={account} />
         </>
     )
 }

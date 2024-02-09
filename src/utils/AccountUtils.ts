@@ -25,3 +25,7 @@ export function generateAccount(seedPhrase: string = "", index: number = 0):
 export function toFixedIfNecessary(value: string, decimalPlaces: number = 4) {
     return +parseFloat(value).toFixed(decimalPlaces);
 }
+
+export function shortenAddress(str: string, numChars: number = 4) {
+    return `${str.substring(0, numChars)}...${str.substring(str.length - numChars)}`
+}

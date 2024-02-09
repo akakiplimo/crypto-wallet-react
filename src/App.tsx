@@ -1,5 +1,5 @@
 import './App.css'
-import AccountCreate from "./components/container/Account/AccountCreate.tsx";
+import AccountCreate from "./components/functional/Account/AccountCreate.tsx";
 
 function App() {
 
